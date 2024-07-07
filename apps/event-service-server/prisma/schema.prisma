@@ -1,0 +1,58 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  title       String?
+  description String?
+  date        DateTime?
+  location    String?
+  organizer   String?
+  tickets     Ticket[]
+}
+
+model UserProfile {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  username       String?
+  email          String?
+  profilePicture Json?
+}
+
+model Ticket {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  price     Float?
+  buyer     String?
+  seller    String?
+  event     Event?   @relation(fields: [eventId], references: [id])
+  eventId   String?
+}
+
+model MapLocation {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  address   String?
+  latitude  Float?
+  longitude Float?
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content   String?
+  sender    String?
+  receiver  String?
+}
